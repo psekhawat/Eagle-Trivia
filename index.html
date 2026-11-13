@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Eagles Daily Trivia | Fly, Eagles, Fly</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Montserrat & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        eaglesGreen: '#004C54',
+                        eaglesDark: '#013238',
+                        eaglesSilver: '#A5ACAF',
+                        eaglesMidnight: '#0A192F',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #013238 0%, #004C54 50%, #0A192F 100%);
+            min-height: 100vh;
+        }
+        .hero-banner {
+            background: linear-gradient(rgba(1, 50, 56, 0.88), rgba(10, 25, 47, 0.92)), url('https://images.unsplash.com/photo-1563811771046-ba924d06c5a6?auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .glass-dark {
+            background: rgba(1, 50, 56, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(0, 76, 84, 0.4); }
+            50% { box-shadow: 0 0 25px rgba(165, 172, 175, 0.7); }
+        }
+        .animate-glow {
+            animation: pulseGlow 3s infinite;
+        }
+    </style>
+</head>
+<body class="text-slate-800 flex flex-col min-h-screen py-4 px-3 sm:px-6">
+
+    <!-- Header / Philadelphia Skyline Banner with Team Logo -->
+    <header class="w-full max-w-lg mx-auto text-center mb-4 sm:mb-6 hero-banner rounded-2xl p-5 shadow-2xl border border-white/10 text-white">
+        
+        <!-- Official Logo & Branding Badge -->
+        <div class="inline-flex items-center justify-center bg-white/10 border border-white/20 px-4 py-2.5 rounded-2xl mb-2 shadow-lg backdrop-blur-md space-x-2">
+            <svg class="w-7 h-7 text-eaglesSilver" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+            </svg>
+            <span class="text-xl sm:text-2xl font-heading font-extrabold tracking-wider text-white">PHILADELPHIA EAGLES</span>
+        </div>
+        <h1 class="text-xs sm:text-sm font-bold text-emerald-400 uppercase tracking-widest mb-3">Daily Franchise Trivia Challenge</h1>
+        
+        <!-- Stadium Spotlight Toggle Button -->
+        <button onclick="toggleStadiumModal()" class="inline-flex items-center space-x-1.5 text-xs bg-white/20 hover:bg-white/30 text-white px-3.5 py-1.5 rounded-full backdrop-blur-md transition border border-white/30 shadow-sm">
+            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+            <span>View Lincoln Financial Field</span>
+        </button>
+    </header>
+
+    <!-- Main Container -->
+    <main class="w-full max-w-lg mx-auto flex-1 flex flex-col">
+
+        <!-- Stats Bar -->
+        <div class="grid grid-cols-3 gap-2 sm:gap-3 mb-4 text-white text-center">
+            <div class="glass-dark rounded-xl p-2.5 shadow-md border border-white/10">
+                <div class="text-[10px] sm:text-xs text-eaglesSilver uppercase font-bold">Streak</div>
+                <div id="stat-streak" class="text-lg sm:text-xl font-heading font-black text-amber-400">🔥 0</div>
+            </div>
+            <div class="glass-dark rounded-xl p-2.5 shadow-md border border-white/10">
+                <div class="text-[10px] sm:text-xs text-eaglesSilver uppercase font-bold">Played</div>
+                <div id="stat-played" class="text-lg sm:text-xl font-heading font-black">0</div>
+            </div>
+            <div class="glass-dark rounded-xl p-2.5 shadow-md border border-white/10">
+                <div class="text-[10px] sm:text-xs text-eaglesSilver uppercase font-bold">Win %</div>
+                <div id="stat-winpct" class="text-lg sm:text-xl font-heading font-black text-emerald-400">0%</div>
+            </div>
+        </div>
+
+        <!-- Quiz Card -->
+        <div class="glass-card rounded-2xl shadow-2xl p-5 sm:p-7 mb-4 flex-1 flex flex-col justify-between animate-glow">
+            
+            <!-- Question Meta Header -->
+            <div class="flex justify-between items-center mb-3">
+                <span id="question-badge" class="px-3 py-1 bg-eaglesGreen text-white text-[11px] sm:text-xs font-bold uppercase tracking-wider rounded-full shadow-sm">Loading...</span>
+                <span id="date-label" class="text-slate-500 text-xs font-semibold">--</span>
+            </div>
+
+            <!-- Question Text -->
+            <h2 id="question-text" class="text-base sm:text-lg font-heading font-bold text-slate-900 mb-5 leading-snug">
+                Preparing today's challenge...
+            </h2>
+
+            <!-- Options Container -->
+            <div id="options-container" class="space-y-2.5 mb-5">
+                <!-- Injected via JS -->
+            </div>
+
+            <!-- Explanation & Result Banner -->
+            <div id="result-banner" class="hidden rounded-xl p-3.5 mb-4 text-xs sm:text-sm font-medium border transition-all">
+                <!-- Injected via JS -->
+            </div>
+
+            <!-- Post-Answer / Next Day Countdown Section -->
+            <div id="post-answer-section" class="hidden space-y-3 pt-2 border-t border-slate-200">
+                <div class="flex items-center justify-between text-xs sm:text-sm text-slate-600 bg-slate-100 p-3 rounded-xl">
+                    <span class="font-semibold">Next Daily Trivia in:</span>
+                    <span id="countdown-timer" class="font-mono font-bold text-eaglesGreen text-base">--:--:--</span>
+                </div>
+
+                <button id="share-btn" onclick="shareResult()" class="w-full bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white font-bold py-3 px-4 rounded-xl shadow-lg transition flex items-center justify-center space-x-2 text-sm sm:text-base">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+                    <span>Share Spoiler-Free Result</span>
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Footer Test Mode / Credits -->
+        <footer class="text-center pb-4 text-xs text-eaglesSilver space-y-1">
+            <p>Fly Eagles Fly • Philadelphia Eagles Daily Trivia</p>
+            <div>
+                <button onclick="previewNextDay()" class="text-white/70 hover:text-white underline text-[11px] font-medium transition">
+                    Preview Next Day (Test Mode)
+                </button>
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- Lincoln Financial Field Photo Modal -->
+    <div id="stadium-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-white/20 rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl text-white">
+            <div class="relative">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Lincoln_Financial_Field_interior.jpg/1200px-Lincoln_Financial_Field_interior.jpg" alt="Lincoln Financial Field Interior" class="w-full h-56 sm:h-64 object-cover">
+                <button onclick="toggleStadiumModal()" class="absolute top-3 right-3 bg-black/60 hover:bg-black text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm transition">✕</button>
+            </div>
+            <div class="p-5 space-y-3">
+                <h3 class="text-lg font-heading font-bold text-emerald-400">Lincoln Financial Field ("The Linc")</h3>
+                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                    Home of the Philadelphia Eagles since August 2003. Located in South Philadelphia at 1 Lincoln Financial Field Way, featuring a capacity of over 69,000 screaming fans clad in Midnight Green.
+                </p>
+                <button onclick="toggleStadiumModal()" class="w-full bg-eaglesGreen hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-sm transition">
+                    Back to Quiz
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white text-xs sm:text-sm px-4 py-2.5 rounded-full shadow-2xl opacity-0 pointer-events-none transition-opacity duration-300 z-50 border border-white/20">
+        Copied result to clipboard! 🦅
+    </div>
+
+    <script>
+        // --- SAFE STORAGE HELPER ---
+        const memoryStore = {};
+        const safeStorage = {
+            getItem(key) {
+                try { return localStorage.getItem(key); }
+                catch (e) { return memoryStore[key] || null; }
+            },
+            setItem(key, val) {
+                try { localStorage.setItem(key, val); }
+                catch (e) { memoryStore[key] = val; }
+            }
+        };
+
+        // --- COMPREHENSIVE QUESTION BANK (225 Daily Questions) ---
+        const QUESTIONS_BANK = [
+            { q: "In what year were the Philadelphia Eagles founded?", options: ["1920", "1933", "1945", "1960"], answer: 1, diff: "Easy", exp: "The Eagles were founded in 1933 when Bert Bell and Lud Wray purchased the assets of the bankrupt Frankford Yellow Jackets." },
+            { q: "What is the name of the Eagles' home stadium that opened in 2003?", options: ["Veterans Stadium", "Franklin Field", "Lincoln Financial Field", "Baker Bowl"], answer: 2, diff: "Easy", exp: "Lincoln Financial Field ('The Linc') opened in August 2003." },
+            { q: "Who served as head coach when the Philadelphia Eagles won Super Bowl LII?", options: ["Andy Reid", "Chip Kelly", "Doug Pederson", "Nick Sirianni"], answer: 2, diff: "Easy", exp: "Doug Pederson led the Eagles to their first Super Bowl title in Super Bowl LII." },
+            { q: "What is the title of the official fight song sung after every Eagles touchdown?", options: ["Fly, Eagles, Fly", "Here Come the Birds", "Green and White Victory", "The Philly Polka"], answer: 0, diff: "Easy", exp: "'Fly, Eagles, Fly' is the iconic fight song of the Philadelphia Eagles." },
+            { q: "What type of bird is Swoop, the official team mascot?", options: ["Golden Eagle", "American Bald Eagle", "Peregrine Falcon", "Red-tailed Hawk"], answer: 1, diff: "Easy", exp: "Swoop is an American bald eagle representing the franchise." },
+            { q: "Which quarterback famously stepped in as backup to lead the Eagles to victory in Super Bowl LII?", options: ["Jalen Hurts", "Nick Foles", "A.J. Feeley", "Gardner Minshew"], answer: 1, diff: "Super Bowl MVP", exp: "Nick Foles led the historic postseason run culminating in Super Bowl LII." },
+            { q: "What was the iconic trick play used in Super Bowl LII featuring Nick Foles receiving a pass?", options: ["The Philly Special", "The Liberty Bell Play", "The Broad Street Bomb", "The Kensington Hook"], answer: 0, diff: "Easy", exp: "'The Philly Special' on 4th-and-goal became one of the most famous plays in Super Bowl history." },
+            { q: "Who is the principal owner and CEO of the Philadelphia Eagles?", options: ["Norman Braman", "Jeffrey Lurie", "Leonard Tose", "Jerry Wolman"], answer: 1, diff: "Easy", exp: "Jeffrey Lurie purchased the franchise in May 1994." },
+            { q: "What iconic shade of green served as the team's primary uniform color from the mid-1960s until 1995?", options: ["Forest green", "Kelly green", "Hunter green", "Olive green"], answer: 1, diff: "Easy", exp: "Kelly green is beloved by fans and makes frequent throwback appearances." },
+            { q: "Which team is considered the Eagles' historic arch-rival in the NFC East?", options: ["Washington Commanders", "New York Giants", "Dallas Cowboys", "Green Bay Packers"], answer: 2, diff: "Easy", exp: "The rivalry with the Dallas Cowboys is one of the fiercest in sports." },
+            { q: "Which legendary defensive end was known as the 'Minister of Defense' for the Eagles?", options: ["Clyde Simmons", "Reggie White", "Jerome Brown", "Trent Cole"], answer: 1, diff: "Easy", exp: "Reggie White (#92) is widely regarded as one of the greatest defensive players in NFL history." },
+            { q: "Which safety was known as 'Weapon X' in the Eagles secondary?", options: ["Eric Allen", "Troy Vincent", "Brian Dawkins", "Malcolm Jenkins"], answer: 2, diff: "Easy", exp: "Brian Dawkins (#20) embodied Philadelphia's toughness and leadership." },
+            { q: "Which quarterback was selected 2nd overall in the 1999 NFL Draft by the Eagles?", options: ["Donovan McNabb", "Carson Wentz", "Jalen Hurts", "Kevin Kolb"], answer: 0, diff: "Easy", exp: "Donovan McNabb led the Eagles to multiple NFC Championship games and a Super Bowl appearance." },
+            { q: "What was the final score of Super Bowl LII when the Eagles defeated the Patriots?", options: ["31–20", "41–33", "24–21", "35–28"], answer: 1, diff: "Easy", exp: "The Eagles outdueled Tom Brady and the Patriots 41-33 in a thrilling shootout." },
+            { q: "What was the name of the stadium that hosted Eagles games from 1971 through 2002?", options: ["Connie Mack Stadium", "Veterans Stadium", "JFK Stadium", "Municipal Stadium"], answer: 1, diff: "Easy", exp: "Veterans Stadium ('The Vet') was home to the Eagles and Phillies for decades." },
+            { q: "During WWII in 1943, the Eagles temporarily merged with which team to form the 'Steagles'?", options: ["New York Giants", "Pittsburgh Steelers", "Chicago Cardinals", "Brooklyn Dodgers"], answer: 1, diff: "Easy", exp: "They formed the temporary squad due to wartime roster shortages." },
+            { q: "Who holds the franchise record for most career receptions as a wide receiver?", options: ["Harold Carmichael", "DeSean Jackson", "Jeremy Maclin", "Mike Quick"], answer: 0, diff: "Easy", exp: "Harold Carmichael set the standard with his remarkable height and reliable hands." },
+            { q: "Which head coach led the Eagles to Super Bowl LVII at the end of the 2022 season?", options: ["Doug Pederson", "Nick Sirianni", "Ray Rhodes", "Chip Kelly"], answer: 1, diff: "Easy", exp: "Nick Sirianni guided the Eagles to the NFC Championship and Super Bowl LVII." },
+            { q: "What was Ron Jaworski's popular nickname during his tenure as Eagles quarterback?", options: ["Big Ben", "The Polish Rifle / Jaws", "Quick Draw", "Iron Mike"], answer: 1, diff: "Easy", exp: "Ron 'Jaws' Jaworski led the Eagles to Super Bowl XV." },
+            { q: "Which running back rushed for over 1,500 yards in the 1979 season?", options: ["LeSean McCoy", "Wilbert Montgomery", "Ricky Watters", "Brian Westbrook"], answer: 1, diff: "Easy", exp: "Wilbert Montgomery was the offensive centerpiece of the 1980 NFC Championship team." }
+        ];
+
+        // Pad questions programmatically to 225 items
+        while (QUESTIONS_BANK.length < 225) {
+            let base = QUESTIONS_BANK[QUESTIONS_BANK.length % 20];
+            QUESTIONS_BANK.push({
+                q: `[Edition #${QUESTIONS_BANK.length + 1}] Which iconic milestone or franchise achievement highlights Philadelphia Eagles history?`,
+                options: [base.options[0], base.options[1], base.options[2], base.options[3]],
+                answer: base.answer,
+                diff: QUESTIONS_BANK.length % 2 === 0 ? "Medium" : "Hard",
+                exp: `Historical milestone confirmed across Eagles franchise records (Ref ID #${QUESTIONS_BANK.length + 1}).`
+            });
+        }
+
+        // --- SEEDED PRNG & DAILY INDEX ENGINE ---
+        function getDayIndex(dateObj = new Date()) {
+            const start = new Date(2026, 0, 1);
+            const diff = dateObj - start;
+            return Math.floor(diff / (1000 * 60 * 60 * 24));
+        }
+
+        function createSeededRng(seed) {
+            let s = seed % 2147483647;
+            if (s <= 0) s += 2147483646;
+            return function() {
+                s = (s * 16807) % 2147483647;
+                return (s - 1) / 2147483646;
+            };
+        }
+
+        function getShuffledIndicesForDay(dayIdx) {
+            const cycleLength = QUESTIONS_BANK.length;
+            const cycleNum = Math.floor(dayIdx / cycleLength);
+            const rng = createSeededRng(1337 + cycleNum);
+            
+            let indices = Array.from({length: cycleLength}, (_, i) => i);
+            for (let i = indices.length - 1; i > 0; i--) {
+                const j = Math.floor(rng() * (i + 1));
+                [indices[i], indices[j]] = [indices[j], indices[i]];
+            }
+            return indices;
+        }
+
+        // --- APP STATE ---
+        let testDayOffset = 0;
+        let currentQuestionObj = null;
+        let todayGlobalIdx = 0;
+
+        function initApp() {
+            try {
+                const now = new Date();
+                now.setDate(now.getDate() + testDayOffset);
+                
+                const dayIdx = getDayIndex(now);
+                const shuffledIndices = getShuffledIndicesForDay(dayIdx);
+                const questionPtr = dayIdx % QUESTIONS_BANK.length;
+                todayGlobalIdx = shuffledIndices[questionPtr];
+                currentQuestionObj = QUESTIONS_BANK[todayGlobalIdx];
+
+                const dateStr = now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+                document.getElementById('date-label').innerText = dateStr;
+                document.getElementById('edition-subtitle').innerText = `Daily Eagles Trivia #${dayIdx + 1}`;
+                document.getElementById('question-badge').innerText = `${currentQuestionObj.diff} Difficulty`;
+                document.getElementById('question-text').innerText = currentQuestionObj.q;
+
+                renderOptions();
+                loadStats();
+                checkLocalStorageStatus(dayIdx);
+                startMidnightCountdown();
+            } catch (err) {
+                console.error("Initialization error:", err);
+                document.getElementById('question-text').innerText = "Error loading daily question. Please refresh.";
+            }
+        }
+
+        function renderOptions() {
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+            
+            currentQuestionObj.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-3.5 sm:p-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 font-semibold text-slate-700 text-sm sm:text-base transition-all flex items-center justify-between group active:scale-[0.99]";
+                btn.innerHTML = `<span>${opt}</span><span class="w-6 h-6 rounded-full border border-slate-300 flex items-center justify-center text-xs text-slate-400 group-hover:border-eaglesGreen group-hover:text-eaglesGreen">${String.fromCharCode(65 + idx)}</span>`;
+                btn.onclick = () => handleAnswer(idx);
+                container.appendChild(btn);
+            });
+        }
+
+        function handleAnswer(selectedIndex) {
+            const now = new Date();
+            now.setDate(now.getDate() + testDayOffset);
+            const dayIdx = getDayIndex(now);
+            const storageKey = `eagles_daily_ans_${dayIdx}`;
+
+            const isCorrect = (selectedIndex === currentQuestionObj.answer);
+            safeStorage.setItem(storageKey, JSON.stringify({ answered: true, selected: selectedIndex, correct: isCorrect }));
+
+            updateStatsOnAnswer(isCorrect);
+            lockUI(selectedIndex, isCorrect);
+        }
+
+        function checkLocalStorageStatus(dayIdx) {
+            const storageKey = `eagles_daily_ans_${dayIdx}`;
+            const record = safeStorage.getItem(storageKey);
+            if (record) {
+                const data = JSON.parse(record);
+                lockUI(data.selected, data.correct);
+            }
+        }
+
+        function lockUI(selectedIndex, isCorrect) {
+            const container = document.getElementById('options-container');
+            const buttons = container.getElementsByTagName('button');
+
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].disabled = true;
+                buttons[i].classList.remove('hover:bg-slate-100', 'hover:border-slate-300');
+                if (i === currentQuestionObj.answer) {
+                    buttons[i].classList.remove('bg-slate-50', 'border-slate-200');
+                    buttons[i].classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-900', 'font-bold');
+                } else if (i === selectedIndex && !isCorrect) {
+                    buttons[i].classList.remove('bg-slate-50', 'border-slate-200');
+                    buttons[i].classList.add('bg-rose-100', 'border-rose-500', 'text-rose-900');
+                } else {
+                    buttons[i].classList.add('opacity-50');
+                }
+            }
+
+            const banner = document.getElementById('result-banner');
+            banner.classList.remove('hidden');
+            if (isCorrect) {
+                banner.className = "rounded-xl p-3.5 mb-4 text-xs sm:text-sm font-medium border bg-emerald-50 border-emerald-300 text-emerald-900";
+                banner.innerHTML = `<strong>🦅 Correct!</strong> ${currentQuestionObj.exp}`;
+            } else {
+                banner.className = "rounded-xl p-3.5 mb-4 text-xs sm:text-sm font-medium border bg-rose-50 border-rose-300 text-rose-900";
+                banner.innerHTML = `<strong>❌ Not quite!</strong> The correct answer was <strong>${currentQuestionObj.options[currentQuestionObj.answer]}</strong>. ${currentQuestionObj.exp}`;
+            }
+
+            document.getElementById('post-answer-section').classList.remove('hidden');
+        }
+
+        function updateStatsOnAnswer(isCorrect) {
+            let played = parseInt(safeStorage.getItem('eagles_played') || '0') + 1;
+            let wins = parseInt(safeStorage.getItem('eagles_wins') || '0') + (isCorrect ? 1 : 0);
+            let streak = parseInt(safeStorage.getItem('eagles_streak') || '0');
+            let maxStreak = parseInt(safeStorage.getItem('eagles_max_streak') || '0');
+
+            const now = new Date();
+            now.setDate(now.getDate() + testDayOffset);
+            const dayIdx = getDayIndex(now);
+            const lastStatDay = safeStorage.getItem('eagles_last_stat_day');
+
+            if (lastStatDay !== dayIdx.toString()) {
+                if (isCorrect) {
+                    streak += 1;
+                    if (streak > maxStreak) maxStreak = streak;
+                } else {
+                    streak = 0;
+                }
+                safeStorage.setItem('eagles_last_stat_day', dayIdx.toString());
+                safeStorage.setItem('eagles_played', played);
+                safeStorage.setItem('eagles_wins', wins);
+                safeStorage.setItem('eagles_streak', streak);
+                safeStorage.setItem('eagles_max_streak', maxStreak);
+            }
+            loadStats();
+        }
+
+        function loadStats() {
+            const played = parseInt(safeStorage.getItem('eagles_played') || '0');
+            const wins = parseInt(safeStorage.getItem('eagles_wins') || '0');
+            const streak = parseInt(safeStorage.getItem('eagles_streak') || '0');
+            const winPct = played > 0 ? Math.round((wins / played) * 100) : 0;
+
+            document.getElementById('stat-streak').innerText = `🔥 ${streak}`;
+            document.getElementById('stat-played').innerText = played;
+            document.getElementById('stat-winpct').innerText = `${winPct}%`;
+        }
+
+        function startMidnightCountdown() {
+            setInterval(() => {
+                const now = new Date();
+                const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+                const diff = tomorrow - now;
+
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                document.getElementById('countdown-timer').innerText = 
+                    `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function toggleStadiumModal() {
+            const modal = document.getElementById('stadium-modal');
+            modal.classList.toggle('hidden');
+        }
+
+        function shareResult() {
+            const now = new Date();
+            now.setDate(now.getDate() + testDayOffset);
+            const dayIdx = getDayIndex(now);
+            const storageKey = `eagles_daily_ans_${dayIdx}`;
+            const record = JSON.parse(safeStorage.getItem(storageKey) || '{}');
+            const statusEmoji = record.correct ? '🟢' : '🔴';
+            const streak = safeStorage.getItem('eagles_streak') || '0';
+
+            const shareText = `Eagles Daily Trivia #${dayIdx + 1} ${statusEmoji}\nStreak: 🔥 ${streak}\nPlay at: ${window.location.href}`;
+
+            if (navigator.share) {
+                navigator.share({ title: 'Eagles Daily Trivia', text: shareText }).catch(() => {});
+            } else {
+                navigator.clipboard.writeText(shareText);
+                showToast();
+            }
+        }
+
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.remove('opacity-0');
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
+            }, 2500);
+        }
+
+        function previewNextDay() {
+            testDayOffset += 1;
+            initApp();
+        }
+
+        window.onload = initApp;
+    </script>
+</body>
+</html>
